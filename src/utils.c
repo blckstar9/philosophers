@@ -6,7 +6,7 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:11:16 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/05/30 20:20:23 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/06/05 23:04:29 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,26 @@ int	ft_atoi_safe(const char *str, bool *error)
 	if (*str != '\0')
 		*error = true;
 	return ((int)(result * sign));
+}
+
+bool	validate_input(int argc, char **argv)
+{
+    int		i;
+    bool	error;
+
+    i = 1;
+    while (i < argc)
+    {
+        if (ft_atoi_safe(argv[i], &error) <= 0 || error)
+        {
+            printf(RED "Error: Argument %d must be a positive integer\n" RS, i);
+            return (false);
+        }
+        i++;
+    }
+    if (ft_atoi_safe(argv[1], &error) > 200)
+    {
+        printf(RED "Warning: Large number of philosophers may cause performance issues\n" RS);
+    }
+    return (true);
 }

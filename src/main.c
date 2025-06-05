@@ -6,7 +6,7 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:46:18 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/05/30 18:14:16 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/06/05 23:04:22 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	clean_up(t_data *data)
 	}
 	pthread_mutex_destroy(&data->print_mutex);
 	pthread_mutex_destroy(&data->end_mutex);
+	pthread_mutex_destroy(&data->meal_mutex);  // Add this line
 	if (data->philos)
 		free(data->philos);
 	free(data);
@@ -75,14 +76,18 @@ void	join_philosophers(t_data *data)
 
 int	main(int argc, char **argv)
 {
-	t_data	*data;
+    t_data	*data;
 
-	if (argc != 5 && argc != 6)
-		return (printf(RED "Error: Wrong number of arguments\n" RS), 1);
-	data = init_data(argc, argv);
-	if (!data)
-		return (printf(RED "Error: Invalid args/init failed\n" RS), 1);
-	if (data->num_philos == 1)
+    if (argc != 5 && argc != 6)
+    {
+        printf(RED "Error: Wrong number of arguments\n" RS);
+        printf("Usage: %s number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\n", argv[0]);
+        return (1);
+    }
+    data = init_data(argc, argv);
+    if (!data)
+        return (printf(RED "Error: Invalid arguments or initialization failed\n" RS), 1);
+    if (data->num_philos == 1)
     {
         printf("0 1 has taken a fork\n");
         precise_sleep(data->time_to_die);

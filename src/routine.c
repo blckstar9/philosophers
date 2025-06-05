@@ -6,7 +6,7 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:11:13 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/05/30 20:07:08 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/06/05 23:04:14 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,17 @@ void	take_forks(t_philo *philo)
 void	eat(t_philo *philo)
 {
     take_forks(philo);
-    if (is_simulation_over(philo->data)) // Add this check
+    if (is_simulation_over(philo->data))
     {
         pthread_mutex_unlock(philo->left_fork);
         pthread_mutex_unlock(philo->right_fork);
         return;
     }
+    print_status(philo, "is eating", GR);
     pthread_mutex_lock(&philo->data->meal_mutex);
-    philo->last_meal_time = get_time();
+    philo->last_meal_time = get_time();  // Update AFTER printing "is eating"
     philo->meals_eaten++;
     pthread_mutex_unlock(&philo->data->meal_mutex);
-    print_status(philo, "is eating", GR);
     precise_sleep(philo->data->time_to_eat);
     pthread_mutex_unlock(philo->left_fork);
     pthread_mutex_unlock(philo->right_fork);

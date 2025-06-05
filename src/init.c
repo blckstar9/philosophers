@@ -6,7 +6,7 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:11:05 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/05/30 18:13:47 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/06/05 23:04:01 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,55 @@ bool	parse_args(t_data *data, int argc, char **argv)
 // Initialize mutexes
 bool	init_mutexes(t_data *data)
 {
-	int	i;
+    int	i;
 
-	data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philos);
-	if (!data->forks)
-		return (false);
-	i = 0;
-	while (i < data->num_philos)
-	{
-		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
-			return (false);
-		i++;
-	}
-	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
-		return (false);
-	if (pthread_mutex_init(&data->end_mutex, NULL) != 0)
-		return (false);
-	if (pthread_mutex_init(&data->meal_mutex, NULL) != 0)
+    data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philos);
+    if (!data->forks)
         return (false);
-	return (true);
+    i = 0;
+    while (i < data->num_philos)
+    {
+        if (pthread_mutex_init(&data->forks[i], NULL) != 0)
+        {
+            // Clean up previously initialized mutexes
+            while (--i >= 0)
+                pthread_mutex_destroy(&data->forks[i]);
+            free(data->forks);
+            return (false);
+        }
+        i++;
+    }
+    if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
+    {
+        // Clean up all fork mutexes
+        i = 0;
+        while (i < data->num_philos)
+            pthread_mutex_destroy(&data->forks[i++]);
+        free(data->forks);
+        return (false);
+    }
+    if (pthread_mutex_init(&data->end_mutex, NULL) != 0)
+    {
+        // Clean up all previously initialized mutexes
+        i = 0;
+        while (i < data->num_philos)
+            pthread_mutex_destroy(&data->forks[i++]);
+        pthread_mutex_destroy(&data->print_mutex);
+        free(data->forks);
+        return (false);
+    }
+    if (pthread_mutex_init(&data->meal_mutex, NULL) != 0)
+    {
+        // Clean up all previously initialized mutexes
+        i = 0;
+        while (i < data->num_philos)
+            pthread_mutex_destroy(&data->forks[i++]);
+        pthread_mutex_destroy(&data->print_mutex);
+        pthread_mutex_destroy(&data->end_mutex);
+        free(data->forks);
+        return (false);
+    }
+    return (true);
 }
 
 // Initialize philosophers
