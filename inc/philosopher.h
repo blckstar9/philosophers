@@ -6,7 +6,7 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:46:38 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/05/30 17:00:08 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/06/23 19:52:50 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_data
 // Function declarations
 void		*philosopher_routine(void *arg);
 void		monitor_philosophers(t_data *data);
+bool		init_mutexes(t_data *data);
 t_data		*init_data(int argc, char **argv);
 void		clean_up(t_data *data);
 long long	get_time(void);
