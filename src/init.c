@@ -6,7 +6,7 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:11:05 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/06/05 23:04:01 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/06/23 19:47:17 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,80 +33,26 @@ bool	parse_args(t_data *data, int argc, char **argv)
 	return (true);
 }
 
-// Initialize mutexes
-bool	init_mutexes(t_data *data)
-{
-    int	i;
-
-    data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philos);
-    if (!data->forks)
-        return (false);
-    i = 0;
-    while (i < data->num_philos)
-    {
-        if (pthread_mutex_init(&data->forks[i], NULL) != 0)
-        {
-            // Clean up previously initialized mutexes
-            while (--i >= 0)
-                pthread_mutex_destroy(&data->forks[i]);
-            free(data->forks);
-            return (false);
-        }
-        i++;
-    }
-    if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
-    {
-        // Clean up all fork mutexes
-        i = 0;
-        while (i < data->num_philos)
-            pthread_mutex_destroy(&data->forks[i++]);
-        free(data->forks);
-        return (false);
-    }
-    if (pthread_mutex_init(&data->end_mutex, NULL) != 0)
-    {
-        // Clean up all previously initialized mutexes
-        i = 0;
-        while (i < data->num_philos)
-            pthread_mutex_destroy(&data->forks[i++]);
-        pthread_mutex_destroy(&data->print_mutex);
-        free(data->forks);
-        return (false);
-    }
-    if (pthread_mutex_init(&data->meal_mutex, NULL) != 0)
-    {
-        // Clean up all previously initialized mutexes
-        i = 0;
-        while (i < data->num_philos)
-            pthread_mutex_destroy(&data->forks[i++]);
-        pthread_mutex_destroy(&data->print_mutex);
-        pthread_mutex_destroy(&data->end_mutex);
-        free(data->forks);
-        return (false);
-    }
-    return (true);
-}
-
 // Initialize philosophers
 bool	init_philosophers(t_data *data)
 {
-    int	i;
+	int	i;
 
-    data->philos = malloc(sizeof(t_philo) * data->num_philos);
-    if (!data->philos)
-        return (false);
-    i = 0;
-    while (i < data->num_philos)
-    {
-        data->philos[i].id = i + 1;
-        data->philos[i].meals_eaten = 0;
-        data->philos[i].last_meal_time = 0;
-        data->philos[i].data = data;
-        data->philos[i].left_fork = &data->forks[i];
-        data->philos[i].right_fork = &data->forks[(i + 1) % data->num_philos];
-        i++;
-    }
-    return (true);
+	data->philos = malloc(sizeof(t_philo) * data->num_philos);
+	if (!data->philos)
+		return (false);
+	i = 0;
+	while (i < data->num_philos)
+	{
+		data->philos[i].id = i + 1;
+		data->philos[i].meals_eaten = 0;
+		data->philos[i].last_meal_time = 0;
+		data->philos[i].data = data;
+		data->philos[i].left_fork = &data->forks[i];
+		data->philos[i].right_fork = &data->forks[(i + 1) % data->num_philos];
+		i++;
+	}
+	return (true);
 }
 
 // Initialize data structure

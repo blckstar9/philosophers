@@ -6,7 +6,7 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:11:16 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/06/05 23:04:29 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/06/23 19:45:22 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,53 +52,22 @@ void	precise_sleep(long long ms)
 		usleep(50);
 }
 
-int	ft_atoi_safe(const char *str, bool *error)
-{
-	long	result;
-	int		sign;
-
-	result = 0;
-	sign = 1;
-	while (*str == ' ' || (*str >= 9 && *str <= 13))
-		str++;
-	if (*str == '-')
-		sign = -1;
-	if (*str == '-' || *str == '+')
-		str++;
-	while (*str >= '0' && *str <= '9')
-	{
-		result = result * 10 + (*str - '0');
-		if ((sign == 1 && result > INT_MAX)
-			|| (sign == -1 && (-result) < INT_MIN))
-		{
-			*error = true;
-			return (0);
-		}
-		str++;
-	}
-	if (*str != '\0')
-		*error = true;
-	return ((int)(result * sign));
-}
-
 bool	validate_input(int argc, char **argv)
 {
-    int		i;
-    bool	error;
+	int		i;
+	bool	error;
 
-    i = 1;
-    while (i < argc)
-    {
-        if (ft_atoi_safe(argv[i], &error) <= 0 || error)
-        {
-            printf(RED "Error: Argument %d must be a positive integer\n" RS, i);
-            return (false);
-        }
-        i++;
-    }
-    if (ft_atoi_safe(argv[1], &error) > 200)
-    {
-        printf(RED "Warning: Large number of philosophers may cause performance issues\n" RS);
-    }
-    return (true);
+	i = 1;
+	while (i < argc)
+	{
+		if (ft_atoi_safe(argv[i], &error) <= 0 || error)
+		{
+			printf(RED "Error: Argument %d must be a positive integer\n" RS, i);
+			return (false);
+		}
+		i++;
+	}
+	if (ft_atoi_safe(argv[1], &error) > 200)
+		printf(RED "Warning: Large nb of philos->performance issues?\n" RS);
+	return (true);
 }
