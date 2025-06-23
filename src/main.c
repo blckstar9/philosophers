@@ -6,7 +6,7 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:46:18 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/06/23 19:48:48 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/06/23 20:27:07 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ bool	create_philosophers(t_data *data)
 	i = 0;
 	while (i < data->num_philos)
 	{
-		data->philos[i].last_meal_time = data->start_time;
+		data->philos[i].last_meal_time = 0;
 		i++;
 	}
 	i = 0;

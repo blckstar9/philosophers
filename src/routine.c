@@ -6,7 +6,7 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:11:13 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/06/23 19:01:57 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/06/23 21:01:34 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	eat(t_philo *philo)
 	}
 	print_status(philo, "is eating", GR);
 	pthread_mutex_lock(&philo->data->meal_mutex);
-	philo->last_meal_time = get_time();
+	philo->last_meal_time = get_time() - philo->data->start_time;
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->data->meal_mutex);
 	precise_sleep(philo->data->time_to_eat);
@@ -72,6 +72,8 @@ void	*philosopher_routine(void *arg)
 		print_status(philo, "is sleeping", MG);
 		precise_sleep(philo->data->time_to_sleep);
 		print_status(philo, "is thinking", CY);
+		if (philo->data->num_philos > 1)
+			usleep(1000);
 	}
 	return (NULL);
 }

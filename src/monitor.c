@@ -6,7 +6,7 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:11:09 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/06/23 19:04:58 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/06/23 20:32:26 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ void	monitor_philosophers(t_data *data)
 		while (++i < data->num_philos)
 		{
 			pthread_mutex_lock(&data->meal_mutex);
-			current_time = get_time();
+			current_time = get_time() - data->start_time;
 			time_since_meal_start = current_time
 				- data->philos[i].last_meal_time;
-			if (time_since_meal_start > data->time_to_die)
+			if (time_since_meal_start >= data->time_to_die)
 			{
 				print_status(&data->philos[i], "died", RED);
 				pthread_mutex_unlock(&data->meal_mutex);
