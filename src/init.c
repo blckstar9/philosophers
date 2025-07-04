@@ -6,7 +6,7 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:11:05 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/06/23 19:47:17 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:18:19 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ bool	parse_args(t_data *data, int argc, char **argv)
 	return (true);
 }
 
-// Initialize philosophers
 bool	init_philosophers(t_data *data)
 {
 	int	i;
@@ -49,13 +48,13 @@ bool	init_philosophers(t_data *data)
 		data->philos[i].last_meal_time = 0;
 		data->philos[i].data = data;
 		data->philos[i].left_fork = &data->forks[i];
-		data->philos[i].right_fork = &data->forks[(i + 1) % data->num_philos];
+		data->philos[i].right_fork = &data->forks[(i + 1)
+			% data->num_philos];
 		i++;
 	}
 	return (true);
 }
 
-// Initialize data structure
 t_data	*init_data(int argc, char **argv)
 {
 	t_data	*data;
@@ -65,6 +64,7 @@ t_data	*init_data(int argc, char **argv)
 		return (NULL);
 	memset(data, 0, sizeof(t_data));
 	data->simulation_end = false;
+	data->start_time = get_time();
 	if (!parse_args(data, argc, argv))
 	{
 		free(data);

@@ -6,7 +6,7 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:11:13 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/06/23 21:01:34 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:20:37 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@ void	take_forks(t_philo *philo)
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->left_fork);
-		print_status(philo, "has taken a fork", YL);
+		ft_print_status(philo, "has taken a fork", YL);
 		pthread_mutex_lock(philo->right_fork);
-		print_status(philo, "has taken a fork", YL);
+		ft_print_status(philo, "has taken a fork", YL);
 	}
 	else
 	{
 		pthread_mutex_lock(philo->right_fork);
-		print_status(philo, "has taken a fork", YL);
+		ft_print_status(philo, "has taken a fork", YL);
 		pthread_mutex_lock(philo->left_fork);
-		print_status(philo, "has taken a fork", YL);
+		ft_print_status(philo, "has taken a fork", YL);
 	}
 }
 
@@ -39,7 +39,7 @@ void	eat(t_philo *philo)
 		pthread_mutex_unlock(philo->right_fork);
 		return ;
 	}
-	print_status(philo, "is eating", GR);
+	ft_print_status(philo, "is eating", GR);
 	pthread_mutex_lock(&philo->data->meal_mutex);
 	philo->last_meal_time = get_time() - philo->data->start_time;
 	philo->meals_eaten++;
@@ -69,9 +69,9 @@ void	*philosopher_routine(void *arg)
 			}
 			pthread_mutex_unlock(&philo->data->meal_mutex);
 		}
-		print_status(philo, "is sleeping", MG);
+		ft_print_status(philo, "is sleeping", MG);
 		precise_sleep(philo->data->time_to_sleep);
-		print_status(philo, "is thinking", CY);
+		ft_print_status(philo, "is thinking", CY);
 		if (philo->data->num_philos > 1)
 			usleep(1000);
 	}

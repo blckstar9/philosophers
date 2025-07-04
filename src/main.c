@@ -6,7 +6,7 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:46:18 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/06/23 20:27:07 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:55:22 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,10 @@ void	clean_up(t_data *data)
 	free(data);
 }
 
-// Create philosopher threads
 bool	create_philosophers(t_data *data)
 {
 	int	i;
 
-	data->start_time = get_time();
 	i = 0;
 	while (i < data->num_philos)
 	{
@@ -79,25 +77,25 @@ int	main(int argc, char **argv)
 	t_data	*data;
 
 	if (argc != 5 && argc != 6)
-		return (printf(RED "Error: Wrong number of arguments\n" RS), 1);
+		return (ft_putstr(RED "Error: Wrong number of args\n" RS), 1);
+	if (!validate_input(argc, argv))
+		return (ft_putstr(RED "Error: Invalid arguments\n" RS), 1);
 	data = init_data(argc, argv);
 	if (!data)
-		return (printf(RED "Error: Invalid args | init failed\n" RS), 1);
+		return (ft_putstr(RED "Error: Invalid args | init failed\n" RS), 1);
 	if (data->num_philos == 1)
 	{
-		printf("0 1 has taken a fork\n");
+		ft_putstr("0 1 has taken a fork\n");
 		precise_sleep(data->time_to_die);
-		printf("%lld 1 died\n", (long long)data->time_to_die);
-		clean_up(data);
-		return (0);
+		ft_print_status(&data->philos[0], "died", RED);
+		return (clean_up(data), 0);
 	}
 	if (!create_philosophers(data))
 	{
 		clean_up(data);
-		return (printf(RED "Error: Failed to create threads\n" RS), 1);
+		return (ft_putstr(RED "Error: Failed to create threads\n" RS), 1);
 	}
 	monitor_philosophers(data);
 	join_philosophers(data);
-	clean_up(data);
-	return (0);
+	return (clean_up(data), 0);
 }

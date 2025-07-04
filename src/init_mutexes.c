@@ -6,13 +6,12 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:46:36 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/06/23 19:46:45 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:17:06 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philosopher.h"
 
-// Helper function to clean up fork mutexes
 static void	cleanup_fork_mutexes(t_data *data, int count)
 {
 	int	i;
@@ -26,7 +25,6 @@ static void	cleanup_fork_mutexes(t_data *data, int count)
 	free(data->forks);
 }
 
-// Helper function to clean up all mutexes in reverse order
 static void	cleanup_all_mutexes(t_data *data, int stage)
 {
 	if (stage >= 3)
@@ -38,7 +36,6 @@ static void	cleanup_all_mutexes(t_data *data, int stage)
 	cleanup_fork_mutexes(data, data->num_philos);
 }
 
-// Initialize fork mutexes
 static bool	init_fork_mutexes(t_data *data)
 {
 	int	i;
@@ -59,7 +56,6 @@ static bool	init_fork_mutexes(t_data *data)
 	return (true);
 }
 
-// Initialize mutexes
 bool	init_mutexes(t_data *data)
 {
 	if (!init_fork_mutexes(data))

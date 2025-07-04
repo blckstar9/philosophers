@@ -6,7 +6,7 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:11:16 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/06/23 19:45:22 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:21:00 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,6 @@ long long	get_time(void)
 
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
-
-void	print_status(t_philo *philo, char *status, char *color)
-{
-	long long	current_time;
-
-	pthread_mutex_lock(&philo->data->print_mutex);
-	if (!is_simulation_over(philo->data))
-	{
-		current_time = get_time() - philo->data->start_time;
-		printf("%s%lld %d %s%s\n", color, current_time, philo->id, status, RS);
-	}
-	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
 bool	is_simulation_over(t_data *data)
@@ -60,14 +47,15 @@ bool	validate_input(int argc, char **argv)
 	i = 1;
 	while (i < argc)
 	{
+		error = false;
 		if (ft_atoi_safe(argv[i], &error) <= 0 || error)
 		{
-			printf(RED "Error: Argument %d must be a positive integer\n" RS, i);
+			ft_putstr(RED "Error: Argument must be a positive integer\n" RS);
 			return (false);
 		}
 		i++;
 	}
 	if (ft_atoi_safe(argv[1], &error) > 200)
-		printf(RED "Warning: Large nb of philos->performance issues?\n" RS);
+		ft_putstr(RED "Warning: Large nb of philos->performance issues?\n" RS);
 	return (true);
 }

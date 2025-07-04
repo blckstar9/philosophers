@@ -6,7 +6,7 @@
 #    By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/30 16:59:31 by aybelaou          #+#    #+#              #
-#    Updated: 2025/06/23 19:47:05 by aybelaou         ###   ########.fr        #
+#    Updated: 2025/07/04 15:35:30 by aybelaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRC_DIR				= src
 SRC					= $(SRC_DIR)/main.c \
 						$(SRC_DIR)/utils.c \
 						$(SRC_DIR)/utils2.c \
+						$(SRC_DIR)/print_status.c \
 						$(SRC_DIR)/init.c \
 						$(SRC_DIR)/init_mutexes.c \
 						$(SRC_DIR)/routine.c \

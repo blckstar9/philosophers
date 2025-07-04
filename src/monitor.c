@@ -6,13 +6,12 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:11:09 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/06/23 20:32:26 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:20:07 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philosopher.h"
 
-// Check if all philosophers have eaten required meals
 bool	all_ate_enough(t_data *data)
 {
 	int	i;
@@ -34,7 +33,6 @@ bool	all_ate_enough(t_data *data)
 	return (true);
 }
 
-// Set simulation end flag
 void	set_simulation_end(t_data *data, bool value)
 {
 	pthread_mutex_lock(&data->end_mutex);
@@ -42,7 +40,6 @@ void	set_simulation_end(t_data *data, bool value)
 	pthread_mutex_unlock(&data->end_mutex);
 }
 
-// Monitor philosophers for death or completion
 void	monitor_philosophers(t_data *data)
 {
 	int			i;
@@ -60,7 +57,7 @@ void	monitor_philosophers(t_data *data)
 				- data->philos[i].last_meal_time;
 			if (time_since_meal_start >= data->time_to_die)
 			{
-				print_status(&data->philos[i], "died", RED);
+				ft_print_status(&data->philos[i], "died", RED);
 				pthread_mutex_unlock(&data->meal_mutex);
 				return (set_simulation_end(data, true));
 			}
