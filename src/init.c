@@ -6,13 +6,31 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:11:05 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/07/04 15:18:19 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/07/05 14:23:52 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * @file init.c
+ * @brief Data structure initialization and argument parsing
+ * 
+ * Handles parsing command line arguments, initializing the main data
+ * structure, and setting up philosopher structures with proper fork
+ * assignments for the circular table arrangement.
+ */
+
 #include "../inc/philosopher.h"
 
-// Parse command line arguments
+/**
+ * @brief Parse and validate command line arguments
+ * @param data Pointer to data structure to populate
+ * @param argc Number of arguments
+ * @param argv Array of argument strings
+ * @return true if all arguments are valid, false otherwise
+ * 
+ * Converts string arguments to integers and validates ranges.
+ * Sets must_eat_count to -1 if not provided (unlimited meals).
+ */
 bool	parse_args(t_data *data, int argc, char **argv)
 {
 	bool	error;
@@ -33,6 +51,15 @@ bool	parse_args(t_data *data, int argc, char **argv)
 	return (true);
 }
 
+/**
+ * @brief Initialize philosopher structures and assign forks
+ * @param data Pointer to simulation data
+ * @return true on success, false on memory allocation failure
+ * 
+ * Creates the philosopher array and assigns left/right forks in a
+ * circular arrangement. Each philosopher gets adjacent forks, with
+ * the last philosopher's right fork being the first fork (circular table).
+ */
 bool	init_philosophers(t_data *data)
 {
 	int	i;
@@ -55,6 +82,16 @@ bool	init_philosophers(t_data *data)
 	return (true);
 }
 
+/**
+ * @brief Main initialization function for simulation data
+ * @param argc Number of command line arguments
+ * @param argv Array of command line arguments
+ * @return Pointer to initialized data structure, NULL on failure
+ * 
+ * Allocates and initializes the main data structure, parses arguments,
+ * initializes mutexes, and sets up philosophers. Handles cleanup
+ * on any initialization failure.
+ */
 t_data	*init_data(int argc, char **argv)
 {
 	t_data	*data;

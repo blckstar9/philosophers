@@ -6,12 +6,28 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:46:36 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/07/04 15:17:06 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/07/05 14:26:03 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * @file init_mutexes.c
+ * @brief Mutex initialization and cleanup with error handling
+ * 
+ * Provides robust mutex initialization with proper cleanup on failures.
+ * Uses staged cleanup to ensure no resource leaks during initialization.
+ */
+
 #include "../inc/philosopher.h"
 
+/**
+ * @brief Clean up fork mutexes
+ * @param data Pointer to simulation data
+ * @param count Number of fork mutexes to destroy
+ * 
+ * Destroys the specified number of fork mutexes and frees the array.
+ * Used during cleanup on initialization failure.
+ */
 static void	cleanup_fork_mutexes(t_data *data, int count)
 {
 	int	i;
@@ -25,6 +41,14 @@ static void	cleanup_fork_mutexes(t_data *data, int count)
 	free(data->forks);
 }
 
+/**
+ * @brief Clean up all mutexes based on initialization stage
+ * @param data Pointer to simulation data
+ * @param stage Initialization stage reached (determines what to cleanup)
+ * 
+ * Performs staged cleanup: stage 1=print, stage 2=print+end,
+ * stage 3=print+end+meal. Always cleans up fork mutexes.
+ */
 static void	cleanup_all_mutexes(t_data *data, int stage)
 {
 	if (stage >= 3)
@@ -36,6 +60,14 @@ static void	cleanup_all_mutexes(t_data *data, int stage)
 	cleanup_fork_mutexes(data, data->num_philos);
 }
 
+/**
+ * @brief Initialize all fork mutexes
+ * @param data Pointer to simulation data
+ * @return true on success, false on failure
+ * 
+ * Allocates and initializes mutex array for forks. Each fork
+ * is represented by a mutex to prevent simultaneous access.
+ */
 static bool	init_fork_mutexes(t_data *data)
 {
 	int	i;
@@ -56,6 +88,14 @@ static bool	init_fork_mutexes(t_data *data)
 	return (true);
 }
 
+/**
+ * @brief Initialize all mutexes with error handling
+ * @param data Pointer to simulation data
+ * @return true if all mutexes initialized successfully, false otherwise
+ * 
+ * Initializes mutexes in order: forks, print, end, meal.
+ * Provides proper cleanup on any failure using staged cleanup.
+ */
 bool	init_mutexes(t_data *data)
 {
 	if (!init_fork_mutexes(data))

@@ -6,12 +6,27 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 15:22:48 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/07/04 15:48:16 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/07/05 14:35:27 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * @file print_status.c
+ * @brief Optimized printing functions for thread-safe output
+ * 
+ * Implements high-performance printing using single write() calls
+ * for precise timing and clean output formatting.
+ */
+
 #include "../inc/philosopher.h"
 
+/**
+ * @brief Print string to stdout
+ * @param str String to print
+ * 
+ * Simple wrapper around write() with null pointer protection.
+ * Used for error messages and simple string output.
+ */
 void	ft_putstr(const char *str)
 {
 	if (!str)
@@ -19,6 +34,13 @@ void	ft_putstr(const char *str)
 	write(1, str, ft_strlen(str));
 }
 
+/**
+ * @brief Calculate number of digits in a long long
+ * @param n Number to analyze
+ * @return Number of digits (including sign for negative numbers)
+ * 
+ * Helper function for ft_lltoa to determine buffer size needed.
+ */
 static int	ft_numlen(long long n)
 {
 	int	len;
@@ -34,6 +56,14 @@ static int	ft_numlen(long long n)
 	return (len);
 }
 
+/**
+ * @brief Convert long long to string
+ * @param n Number to convert
+ * @param str Buffer to store result (must be large enough)
+ * 
+ * Converts integer to string representation. Handles negative
+ * numbers and zero correctly. Used for timestamp and ID formatting.
+ */
 static void	ft_lltoa(long long n, char *str)
 {
 	int			len;
@@ -59,6 +89,16 @@ static void	ft_lltoa(long long n, char *str)
 	str[len] = '\0';
 }
 
+/**
+ * @brief Copy string to buffer starting at position
+ * @param buffer Destination buffer
+ * @param pos Starting position in buffer
+ * @param str Source string to copy
+ * @return New position after copied string
+ * 
+ * Helper function for building formatted output strings.
+ * Returns updated position for chaining multiple copies.
+ */
 static int	copy_string(char *buffer, int pos, char *str)
 {
 	while (*str)
@@ -66,6 +106,20 @@ static int	copy_string(char *buffer, int pos, char *str)
 	return (pos);
 }
 
+/**
+ * @brief Thread-safe status printing with precise timing
+ * @param philo Pointer to philosopher structure
+ * @param status Status message to print
+ * @param color Color code for message (can be NULL)
+ * 
+ * Optimized printing function using single write() call:
+ * - Builds complete formatted string in buffer
+ * - Includes timestamp, philosopher ID, status, and color codes
+ * - Thread-safe using print_mutex
+ * - Skips printing if simulation has ended
+ * 
+ * Output format: "[timestamp] [id] [status]"
+ */
 void	ft_print_status(t_philo *philo, char *status, char *color)
 {
 	char		buffer[256];

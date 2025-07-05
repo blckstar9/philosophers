@@ -6,13 +6,28 @@
 /*   By: aybelaou <aybelaou@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:46:18 by aybelaou          #+#    #+#             */
-/*   Updated: 2025/07/04 15:55:22 by aybelaou         ###   ########.fr       */
+/*   Updated: 2025/07/05 14:22:16 by aybelaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * @file main.c
+ * @brief Main program entry point and thread management
+ * 
+ * Contains the main function, thread creation/joining, and resource cleanup.
+ * Handles program initialization, single philosopher edge case, and
+ * coordinates the overall simulation lifecycle.
+ */
+
 #include "../inc/philosopher.h"
 
-// Clean up allocated resources
+/**
+ * @brief Clean up all allocated resources and destroy mutexes
+ * @param data Pointer to simulation data structure
+ * 
+ * Safely destroys all mutexes and frees allocated memory.
+ * Handles NULL pointer checks to prevent crashes during cleanup.
+ */
 void	clean_up(t_data *data)
 {
 	int	i;
@@ -37,6 +52,14 @@ void	clean_up(t_data *data)
 	free(data);
 }
 
+/**
+ * @brief Create and start all philosopher threads
+ * @param data Pointer to simulation data
+ * @return true if all threads created successfully, false otherwise
+ * 
+ * Initializes last meal times and creates pthread for each philosopher.
+ * Uses philosopher_routine as the thread entry point.
+ */
 bool	create_philosophers(t_data *data)
 {
 	int	i;
@@ -58,7 +81,13 @@ bool	create_philosophers(t_data *data)
 	return (true);
 }
 
-// Join philosopher threads
+/**
+ * @brief Wait for all philosopher threads to complete
+ * @param data Pointer to simulation data
+ * 
+ * Calls pthread_join on all philosopher threads to ensure
+ * proper cleanup before program termination.
+ */
 void	join_philosophers(t_data *data)
 {
 	int	i;
@@ -71,7 +100,19 @@ void	join_philosophers(t_data *data)
 	}
 }
 
-// Main function of the program
+/**
+ * @brief Main program entry point
+ * @param argc Number of command line arguments
+ * @param argv Array of command line argument strings
+ * @return Exit code (0 on success, 1 on error)
+ * 
+ * Validates input, initializes simulation data, and delegates to
+ * appropriate handler (single philosopher or full simulation).
+ * 
+ * Expected arguments:
+ * ./philo 
+ * <num_philos> <time_to_die> <time_to_eat> <time_to_sleep> [must_eat_count]
+ */
 int	main(int argc, char **argv)
 {
 	t_data	*data;
